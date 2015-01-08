@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <!-- <link rel="stylesheet" href="css/normalize.css"> -->
+        <!-- <link rel="stylesheet" href="css/main.css"> -->
+        <!-- <script src="js/vendor/modernizr-2.8.3.min.js"></script> -->
+    </head>
+    <body>
+    	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<button id="initOauth">Init OAuth</button>
+		<input id="client-id-input" type="text" placeholder="client_id"></input>
+    	<div id="oauth-params">
+    		OAuth Params
+    		<ul>
+    			<li>client_code: <span id="client-code"></span></li>
+    			<li>user_code: <span id="user-code"></span></li>
+    			<li>expires_in: <span id="expires-in"></span></li>
+    		</ul>
+    	</div>
+        <script type="text/javascript">
+
+        $('#client-id-input').val(window.location.search.slice(1));
+
+        function initOauthUrl (clientId) {
+        	var url = 'http://okta.okta.com/oauth2/code';
+        	return url + '?client_id=' + clientId;
+        }
+
+        function pollOauthUrl (clientId, clientCode) {
+        	var url = 'http://okta.okta.com/oauth2/token';
+        	return url + '?client_id=' + clientId + '&grant_type=session&code=' + clientCode;
+        }
+        
+
+        $('#initOauth').click(function (argument) {
+        	// body...
+        	console.log('initializing auth')
+        	var clientId = $('#client-id-input').val();
+        	$.ajax({
+        		url: initOauthUrl(clientId),
+        		type: 'POST'
+        	})
+        	.done(function( data ) {
+			    if ( console && console.log ) {
+		    		console.log( data );
+			    }
+			});
+        });
+
+        </script>
+    </body>
+</html>
